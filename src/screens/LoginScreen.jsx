@@ -7,7 +7,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 const LoginScreen = () => {
   const [text, onChangeText] = useState();
   const navigation = useNavigation();
-  const auth = true;
+  const auth = false;
   return (
     <SafeAreaView className="flex-1">
       <View

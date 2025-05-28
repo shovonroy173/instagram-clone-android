@@ -245,3 +245,9 @@ export const notifications = [
     preview: 'https://i.imgur.com/7Vb8tLs.jpg',
   },
 ];
+
+export const chats = [
+  { id: '1', name: 'Alice', lastMessage: 'Hey, what’s up?', time: '2m', avatar: 'https://i.pravatar.cc/100?img=1' },
+  { id: '2', name: 'Bob', lastMessage: 'Check this out!', time: '10m', avatar: 'https://i.pravatar.cc/100?img=2' },
+  // Add more dummy chats
+];
