@@ -7,6 +7,7 @@ import {
   Modal,
   StyleSheet,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import ThemedView from '../utils/ThemedView';
@@ -32,20 +33,39 @@ const StoryComponent = () => {
 
   const theme = useTheme();
 
-  useEffect(() => {
-    (async () => {
-      const cameraPermissionStatus = await Camera.requestCameraPermission();
-      if (cameraPermissionStatus !== 'granted') {
-        console.log('Camera permission denied');
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const cameraPermissionStatus = await Camera.requestCameraPermission();
+  //     if (cameraPermissionStatus !== 'granted') {
+  //       console.log('Camera permission denied');
+  //     }
+  //   })();
+  // }, []);
 
   const device = useCameraDevice(isFrontCamera ? 'front' : 'back');
 
-  const openCamera = () => {
-    setIsCameraActive(true);
-    setAlertVisible(false);
+  // const openCamera = async () => {
+  //   const cameraPermissionStatus = await Camera.requestCameraPermission();
+  //   if (cameraPermissionStatus === 'authorized') {
+  //     setIsCameraActive(true);
+  //     setAlertVisible(false);
+  //   } else {
+  //     console.log('Camera permission denied');
+  //   }
+  // };
+
+  const openCamera = async () => {
+    const cameraPermissionStatus = await Camera.requestCameraPermission();
+    if (cameraPermissionStatus !== 'granted') {
+      Alert.alert(
+        'Permission Required',
+        'Camera access is needed to take a photo.',
+        [{text: 'OK'}],
+      );
+    } else {
+      setIsCameraActive(true);
+      setAlertVisible(false);
+    }
   };
 
   const closeCamera = () => {
@@ -69,7 +89,7 @@ const StoryComponent = () => {
     }
   };
 
-    const openGallery = () => {
+  const openGallery = () => {
     const options = {
       mediaType: 'photo',
       maxWidth: 500,
@@ -157,15 +177,11 @@ const StoryComponent = () => {
             <Text style={styles.title}>Upload Photo</Text>
             <Text style={styles.message}>Choose an option</Text>
 
-            <Pressable style={styles.optionButton} 
-            onPress={openCamera}
-            >
+            <Pressable style={styles.optionButton} onPress={openCamera}>
               <Text style={styles.optionText}>📷 Open Front Camera</Text>
             </Pressable>
 
-            <Pressable style={styles.optionButton} 
-            onPress={openGallery}
-            >
+            <Pressable style={styles.optionButton} onPress={openGallery}>
               <Text style={styles.optionText}>🖼 Choose from Gallery</Text>
             </Pressable>
 
@@ -178,7 +194,7 @@ const StoryComponent = () => {
         </View>
       </Modal>
 
-       <Modal visible={isCameraActive} animationType="fade" transparent={false}>
+      <Modal visible={isCameraActive} animationType="fade" transparent={false}>
         <View style={styles.cameraContainer}>
           {device ? (
             <Camera
@@ -194,9 +210,7 @@ const StoryComponent = () => {
           )}
 
           {/* Capture Button */}
-          <Pressable
-            style={styles.captureButton}
-            onPress={handleTakePhoto}>
+          <Pressable style={styles.captureButton} onPress={handleTakePhoto}>
             <MaterialIcons
               name="camera"
               size={30}

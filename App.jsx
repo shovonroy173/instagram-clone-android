@@ -6,29 +6,25 @@ import {NavigationContainer} from '@react-navigation/native';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import BottomNavigatorScreen from './src/screens/BottomNavigatorScreen';
-import {SafeAreaProvider, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import SingleChatScreen from './src/screens/SingleChatScreen';
 import ChatScreen from './src/screens/ChatScreen';
+import {persistor, store} from './src/redux/store';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
+import AppNavigator from './src/root/AppNavigator';
 
 function App() {
-  const Stack = createNativeStackNavigator();
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
-          <Stack.Screen name="Chat" component={ChatScreen} />
-          <Stack.Screen name="SingleChat" component={SingleChatScreen} />
-          <Stack.Screen
-            name="BottomNavigator"
-            component={BottomNavigatorScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <AppNavigator />
+        </PersistGate>
+      </Provider>
     </SafeAreaProvider>
   );
 }

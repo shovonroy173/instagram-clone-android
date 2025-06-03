@@ -3,11 +3,36 @@ import React, {useState} from 'react';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 import {useNavigation} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
-
+import {useForm, Controller} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {registerSchema} from '../../assets/data/data';
+import { useRegisterMutation } from '../redux/authSlice';
 const RegisterScreen = () => {
-  const [text, onChangeText] = useState();
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    resolver: yupResolver(registerSchema),
+    mode: 'onChange'
+  });
+
   const navigation = useNavigation();
 
+    const [register] = useRegisterMutation();
+  
+
+  const onSubmit = async data => {
+    console.log('register form data:', data);
+    // Call your register API here
+    try {
+      const res = await register(data).unwrap();
+      console.log('LINE AT 21', res);
+      navigation.navigate('Login');
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View
       className="flex-1 justify-center items-center  gap-10 bg-white"
@@ -22,27 +47,62 @@ const RegisterScreen = () => {
       />
       <View className="gap-3 w-full">
         <View className="gap-2 w-full">
-          <TextInput
-            className="border border-zinc-200 rounded-md bg-zinc-50 opacity-50 w-full px-4 placeholder:text-zinc-400"
-            onChangeText={onChangeText}
-            value={text}
-            placeholder="Enter your name.."
+          <Controller
+            control={control}
+            name="name"
+            defaultValue=""
+            render={({field: {onChange, value}}) => (
+              <TextInput
+                className="border border-zinc-200 rounded-md bg-zinc-50 opacity-50 w-full px-4 placeholder:text-zinc-400"
+                onChangeText={onChange}
+                value={value}
+                placeholder="Enter your name.."
+              />
+            )}
           />
-          <TextInput
-            className="border border-zinc-200 rounded-md bg-zinc-50 opacity-50 w-full px-4 placeholder:text-zinc-400"
-            onChangeText={onChangeText}
-            value={text}
-            placeholder="Enter your email.."
+          <Text className="text-red-500 text-sm">
+            {errors.name && errors.name.message}
+          </Text>
+
+          <Controller
+            control={control}
+            name="email"
+            defaultValue=""
+            render={({field: {onChange, value}}) => (
+              <TextInput
+                className="border border-zinc-200 rounded-md bg-zinc-50 opacity-50 w-full px-4 placeholder:text-zinc-400"
+                onChangeText={onChange}
+                value={value}
+                placeholder="Enter your email.."
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            )}
           />
-          <TextInput
-            className="border border-zinc-200 rounded-md bg-zinc-50 opacity-50 w-full px-4 placeholder:text-zinc-400"
-            onChangeText={onChangeText}
-            value={text}
-            placeholder="Enter your password.."
+          <Text className="text-red-500 text-sm">
+            {errors.email && errors.email.message}
+          </Text>
+
+          <Controller
+            control={control}
+            name="password"
+            defaultValue=""
+            render={({field: {onChange, value}}) => (
+              <TextInput
+                className="border border-zinc-200 rounded-md bg-zinc-50 opacity-50 w-full px-4 placeholder:text-zinc-400"
+                onChangeText={onChange}
+                value={value}
+                placeholder="Enter your password.."
+                secureTextEntry
+              />
+            )}
           />
+          <Text className="text-red-500 text-sm">
+            {errors.password && errors.password.message}
+          </Text>
         </View>
       </View>
-      <Pressable className="bg-blue-500 w-full p-3 rounded-md">
+      <Pressable onPress={handleSubmit(onSubmit)} className="bg-blue-500 w-full p-3 rounded-md">
         <Text className="text-white font-semibold text-center">Sign up</Text>
       </Pressable>
       <View className="gap-10 w-full">
@@ -71,9 +131,8 @@ const RegisterScreen = () => {
           <Text className="text-zinc-400 font-medium">
             Already have an account?
           </Text>
-          <Pressable onPress={()=> navigation.navigate('Login')}>
-
-          <Text className="text-blue-300 font-medium">Log in.</Text>
+          <Pressable onPress={() => navigation.navigate('Login')}>
+            <Text className="text-blue-300 font-medium">Log in.</Text>
           </Pressable>
         </View>
       </View>

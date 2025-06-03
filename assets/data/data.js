@@ -251,3 +251,16 @@ export const chats = [
   { id: '2', name: 'Bob', lastMessage: 'Check this out!', time: '10m', avatar: 'https://i.pravatar.cc/100?img=2' },
   // Add more dummy chats
 ];
+
+import * as yup from 'yup';
+
+export const loginSchema = yup.object().shape({
+  email: yup.string().email('Invalid email').required('Email is required'),
+  password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+});
+
+export const registerSchema = yup.object().shape({
+  name: yup.string().required('Name is required'),
+  email: yup.string().email('Invalid email').required('Email is required'),
+  password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+});
