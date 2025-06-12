@@ -9,7 +9,7 @@ import ChatScreen from '../screens/ChatScreen';
 import SingleChatScreen from '../screens/SingleChatScreen';
 import CreateGroupScreen from '../screens/CreateGroupScreen';
 import GroupChatScreen from '../screens/GroupChatScreen';
-
+import CallScreen from '../screens/CallScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +35,8 @@ const AppNavigator = () => {
             <Stack.Screen name="SingleChat" component={SingleChatScreen} />
             <Stack.Screen name="GroupChat" component={GroupChatScreen} />
             <Stack.Screen name="CreateGroup" component={CreateGroupScreen} />
+            <Stack.Screen name="Call" component={CallScreen} />
+            
           </>
         )}
       </Stack.Navigator>

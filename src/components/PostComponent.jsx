@@ -1,10 +1,11 @@
-import {View, Text, Image, FlatList} from 'react-native';
+import {View, Text, Image, FlatList, Pressable} from 'react-native';
 import React, {useCallback, useRef, useState} from 'react';
 import ThemedView from '../utils/ThemedView';
 import ThemedText from '../utils/ThemedText';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
+import { useNavigation } from '@react-navigation/native';
 
 const renderItem = ({item}) => {
   return (
@@ -31,6 +32,8 @@ const PostComponent = ({post}) => {
   }, []);
 
   const viewConfigRef = useRef({viewAreaCoveragePercentThreshold: 50});
+
+  const navigation = useNavigation();
   return (
     <ThemedView>
       <ThemedView
@@ -99,15 +102,16 @@ const PostComponent = ({post}) => {
           <ThemedView styles="flex-row gap-2 items-center">
             <Feather name="heart" size={24} />
             <Feather name="message-circle" size={24} />
-            <Feather name="send" size={24} />
+            <Pressable onPress={() => navigation.navigate("Call")}>
+              <Feather name="send" size={24} />
+            </Pressable>
           </ThemedView>
           <View
             style={{
-
               flexDirection: 'row',
               gap: 6,
               paddingVertical: 10,
-            //   backgroundColor: 'red',
+              //   backgroundColor: 'red',
             }}>
             {post.images.map((_, index) => (
               <View
